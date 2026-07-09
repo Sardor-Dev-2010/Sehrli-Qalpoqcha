@@ -74,59 +74,78 @@ const camera = new Camera(videoElement, {
 function drawFrame() {
     canvasCtx.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
     
-    if (isMagicActive && bgImageData && currentFaces && currentFaces.length > 0) {
-        let face = currentFaces[0];
-        let box = face.boundingBox;
+    if (isMagicActive && bgImageData) {
+        let frameData = canvasCtx.getImageData(0, 0, canvasElement.width, canvasElement.height);
+        let pixels = frameData.data;
+        let bgPixels = bgImageData.data;
         
-        let w = box.width * canvasElement.width;
-        let h_face = box.height * canvasElement.height;
-        let cx = box.xCenter !== undefined ? box.xCenter : (box.xMin !== undefined ? box.xMin + box.width / 2 : 0.5);
-        let cy = box.yCenter !== undefined ? box.yCenter : (box.yMin !== undefined ? box.yMin + box.height / 2 : 0.5);
+        let head_y1 = 0, head_y2 = 0, head_x1 = 0, head_x2 = 0, head_w = 0, head_h = 0;
         
-        let x = cx * canvasElement.width - w/2;
-        let y = cy * canvasElement.height - h_face/2;
-        
-        let head_y1 = Math.max(0, Math.floor(y - h_face * 0.8));
-        let head_y2 = Math.floor(y + h_face * 0.3);
-        let head_x1 = Math.max(0, Math.floor(x - w * 0.2));
-        let head_x2 = Math.min(canvasElement.width, Math.floor(x + w * 1.2));
-        
-        let head_w = head_x2 - head_x1;
-        let head_h = head_y2 - head_y1;
-        
-        if (head_w > 0 && head_h > 0) {
-            let imgData = canvasCtx.getImageData(head_x1, head_y1, head_w, head_h);
-            let pixels = imgData.data;
-            let matchCount = 0;
+        // Yuz kordinatalarini aniqlash
+        if (currentFaces && currentFaces.length > 0) {
+            let face = currentFaces[0];
+            let box = face.boundingBox;
+            let w = box.width * canvasElement.width;
+            let h_face = box.height * canvasElement.height;
+            let cx = box.xCenter !== undefined ? box.xCenter : (box.xMin !== undefined ? box.xMin + box.width / 2 : 0.5);
+            let cy = box.yCenter !== undefined ? box.yCenter : (box.yMin !== undefined ? box.yMin + box.height / 2 : 0.5);
             
-            for(let i = 0; i < pixels.length; i += 4) {
-                let hsv = rgbToHsv(pixels[i], pixels[i+1], pixels[i+2]);
-                if(hsv[0] >= lowerBound[0] && hsv[0] <= upperBound[0] &&
-                   hsv[1] >= lowerBound[1] && hsv[1] <= upperBound[1] &&
-                   hsv[2] >= lowerBound[2] && hsv[2] <= upperBound[2]) {
+            let x = cx * canvasElement.width - w/2;
+            let y = cy * canvasElement.height - h_face/2;
+            
+            head_y1 = Math.max(0, Math.floor(y - h_face * 0.9)); // Kengroq olingan
+            head_y2 = Math.floor(y + h_face * 0.4);
+            head_x1 = Math.max(0, Math.floor(x - w * 0.3));
+            head_x2 = Math.min(canvasElement.width, Math.floor(x + w * 1.3));
+            
+            head_w = head_x2 - head_x1;
+            head_h = head_y2 - head_y1;
+        }
+
+        let matchCount = 0;
+        let width = canvasElement.width;
+        
+        // Pixel-by-pixel sehrli plash (orqa fon bilan almashtirish)
+        for(let i = 0; i < pixels.length; i += 4) {
+            let idx = i / 4;
+            let px = idx % width;
+            let py = Math.floor(idx / width);
+            
+            let hsv = rgbToHsv(pixels[i], pixels[i+1], pixels[i+2]);
+            if(hsv[0] >= lowerBound[0] && hsv[0] <= upperBound[0] &&
+               hsv[1] >= lowerBound[1] && hsv[1] <= upperBound[1] &&
+               hsv[2] >= lowerBound[2] && hsv[2] <= upperBound[2]) {
+                
+                // Matoni fon bilan almashtirish (Plash effekti)
+                pixels[i]   = bgPixels[i];
+                pixels[i+1] = bgPixels[i+1];
+                pixels[i+2] = bgPixels[i+2];
+                
+                // Agar shu piksel yuzning tepasida (kepka joyida) bo'lsa
+                if (head_w > 0 && px >= head_x1 && px <= head_x2 && py >= head_y1 && py <= head_y2) {
                     matchCount++;
                 }
             }
-            
+        }
+        
+        let full_vanish = false;
+        if (head_w > 0) {
             let roi_area = head_w * head_h;
             let cap_ratio = matchCount / roi_area;
             
-            // HUD
-            canvasCtx.strokeStyle = "rgba(241, 196, 15, 0.8)"; // Golden
-            canvasCtx.lineWidth = 3;
-            let lineLen = 15;
-            canvasCtx.beginPath(); canvasCtx.moveTo(head_x1, head_y1 + lineLen); canvasCtx.lineTo(head_x1, head_y1); canvasCtx.lineTo(head_x1 + lineLen, head_y1); canvasCtx.stroke();
-            canvasCtx.beginPath(); canvasCtx.moveTo(head_x2 - lineLen, head_y1); canvasCtx.lineTo(head_x2, head_y1); canvasCtx.lineTo(head_x2, head_y1 + lineLen); canvasCtx.stroke();
-            canvasCtx.beginPath(); canvasCtx.moveTo(head_x1, head_y2 - lineLen); canvasCtx.lineTo(head_x1, head_y2); canvasCtx.lineTo(head_x1 + lineLen, head_y2); canvasCtx.stroke();
-            canvasCtx.beginPath(); canvasCtx.moveTo(head_x2 - lineLen, head_y2); canvasCtx.lineTo(head_x2, head_y2); canvasCtx.lineTo(head_x2, head_y2 - lineLen); canvasCtx.stroke();
-            
-            canvasCtx.fillStyle = "rgba(241, 196, 15, 0.9)";
-            canvasCtx.font = "bold 14px 'Inter', sans-serif";
-            canvasCtx.fillText(`[MATCH: ${(cap_ratio * 100).toFixed(1)}%]`, head_x1, head_y1 - 8);
-            
-            if (cap_ratio > 0.15) {
-                canvasCtx.putImageData(bgImageData, 0, 0);
+            // Agar kepka kiyilgan bo'lsa (kepka joyining 8% idan ko'pi mato rangi bo'lsa)
+            if (cap_ratio > 0.08) {
+                full_vanish = true;
             }
+        }
+        
+        // Natijani chizish
+        if (full_vanish) {
+            // Odam butunlay g'oyib bo'ladi
+            canvasCtx.putImageData(bgImageData, 0, 0);
+        } else {
+            // Faqat mato (plash) g'oyib bo'ladi
+            canvasCtx.putImageData(frameData, 0, 0);
         }
     }
 }
