@@ -11,8 +11,8 @@ let lowerBound = [0, 0, 0];
 let upperBound = [180, 255, 255];
 
 const colors = {
-    'blue': { lower: [70, 30, 10], upper: [150, 255, 255] },
-    'black': { lower: [0, 0, 0], upper: [180, 255, 140] }, // Qora rangni yorug'roq joyda ham olishi uchun V 140 gacha ko'tarildi
+    'blue': { lower: [90, 15, 10], upper: [150, 255, 255] }, // To'q ko'k (Navy) ranglar uchun S va V yanada pasaytirildi
+    'black': { lower: [0, 0, 0], upper: [180, 255, 140] }, 
     'white': { lower: [0, 0, 160], upper: [180, 60, 255] }
 };
 
@@ -98,13 +98,24 @@ function drawFrame() {
             let roi_area = head_w * head_h;
             let cap_ratio = matchCount / roi_area;
             
-            // Debug uchun: ekranda izlayotgan joyimizni va foizni ko'rsatamiz (foydalanuvchiga yordam uchun)
-            canvasCtx.strokeStyle = "rgba(255, 0, 0, 0.5)";
-            canvasCtx.lineWidth = 2;
-            canvasCtx.strokeRect(head_x1, head_y1, head_w, head_h);
-            canvasCtx.fillStyle = "red";
-            canvasCtx.font = "16px Arial";
-            canvasCtx.fillText(`Rang mosligi: ${(cap_ratio * 100).toFixed(1)}%`, head_x1, head_y1 - 10);
+            // Zamonaviy Sci-Fi HUD chizish (foydalanuvchiga qayeri tekshirilayotganini ko'rsatish)
+            canvasCtx.strokeStyle = "rgba(0, 255, 255, 0.8)";
+            canvasCtx.lineWidth = 3;
+            let lineLen = 15;
+            
+            // Yuqori-Chap burchak
+            canvasCtx.beginPath(); canvasCtx.moveTo(head_x1, head_y1 + lineLen); canvasCtx.lineTo(head_x1, head_y1); canvasCtx.lineTo(head_x1 + lineLen, head_y1); canvasCtx.stroke();
+            // Yuqori-O'ng burchak
+            canvasCtx.beginPath(); canvasCtx.moveTo(head_x2 - lineLen, head_y1); canvasCtx.lineTo(head_x2, head_y1); canvasCtx.lineTo(head_x2, head_y1 + lineLen); canvasCtx.stroke();
+            // Pastki-Chap burchak
+            canvasCtx.beginPath(); canvasCtx.moveTo(head_x1, head_y2 - lineLen); canvasCtx.lineTo(head_x1, head_y2); canvasCtx.lineTo(head_x1 + lineLen, head_y2); canvasCtx.stroke();
+            // Pastki-O'ng burchak
+            canvasCtx.beginPath(); canvasCtx.moveTo(head_x2 - lineLen, head_y2); canvasCtx.lineTo(head_x2, head_y2); canvasCtx.lineTo(head_x2, head_y2 - lineLen); canvasCtx.stroke();
+            
+            // Matn
+            canvasCtx.fillStyle = "rgba(0, 255, 255, 0.9)";
+            canvasCtx.font = "bold 16px 'Courier New', monospace";
+            canvasCtx.fillText(`[SKANER: ${(cap_ratio * 100).toFixed(1)}%]`, head_x1, head_y1 - 10);
             
             // Agar yuzning tepasida kamida 15% tanlangan rang bo'lsa -> g'oyib bo'lish
             if (cap_ratio > 0.15) {

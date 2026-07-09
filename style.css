@@ -82,8 +82,9 @@ header h1 {
     margin: 0 auto;
     border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 30px rgba(0, 206, 201, 0.4);
     background-color: #000;
+    border: 2px solid var(--glass-border);
 }
 
 canvas {
