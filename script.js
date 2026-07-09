@@ -105,24 +105,18 @@ function drawFrame() {
         let matchCount = 0;
         let width = canvasElement.width;
         
-        // Pixel-by-pixel sehrli plash (orqa fon bilan almashtirish)
+        // Faqat yuz tepasidagi piksellarni hisoblaymiz (Xira-shira noise bo'lmasligi uchun butun ekranni almashtirmaymiz)
         for(let i = 0; i < pixels.length; i += 4) {
             let idx = i / 4;
             let px = idx % width;
             let py = Math.floor(idx / width);
             
-            let hsv = rgbToHsv(pixels[i], pixels[i+1], pixels[i+2]);
-            if(hsv[0] >= lowerBound[0] && hsv[0] <= upperBound[0] &&
-               hsv[1] >= lowerBound[1] && hsv[1] <= upperBound[1] &&
-               hsv[2] >= lowerBound[2] && hsv[2] <= upperBound[2]) {
-                
-                // Matoni fon bilan almashtirish (Plash effekti)
-                pixels[i]   = bgPixels[i];
-                pixels[i+1] = bgPixels[i+1];
-                pixels[i+2] = bgPixels[i+2];
-                
-                // Agar shu piksel yuzning tepasida (kepka joyida) bo'lsa
-                if (head_w > 0 && px >= head_x1 && px <= head_x2 && py >= head_y1 && py <= head_y2) {
+            // Faqat head_roi ichidagi piksellarni tekshirsak tezroq ishlaydi
+            if (head_w > 0 && px >= head_x1 && px <= head_x2 && py >= head_y1 && py <= head_y2) {
+                let hsv = rgbToHsv(pixels[i], pixels[i+1], pixels[i+2]);
+                if(hsv[0] >= lowerBound[0] && hsv[0] <= upperBound[0] &&
+                   hsv[1] >= lowerBound[1] && hsv[1] <= upperBound[1] &&
+                   hsv[2] >= lowerBound[2] && hsv[2] <= upperBound[2]) {
                     matchCount++;
                 }
             }
@@ -141,10 +135,10 @@ function drawFrame() {
         
         // Natijani chizish
         if (full_vanish) {
-            // Odam butunlay g'oyib bo'ladi
+            // Odam butunlay g'oyib bo'ladi (Python kodidagidek)
             canvasCtx.putImageData(bgImageData, 0, 0);
         } else {
-            // Faqat mato (plash) g'oyib bo'ladi
+            // Asl video ko'rinadi (hech qanday xira-shira noise bo'lmaydi)
             canvasCtx.putImageData(frameData, 0, 0);
         }
     }
