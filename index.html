@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sehrli Qalpoqcha</title>
+    <title>Sehrli Qalpoqcha - Magical UI</title>
     <link rel="stylesheet" href="style.css">
     
     <!-- MediaPipe Face Detection kutubxonalari -->
@@ -11,56 +11,105 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/face_detection.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="background-animation"></div>
+    <div id="particles-js"></div>
     
     <div class="container">
         <header>
-            <h1>🎩 Sehrli Qalpoqcha</h1>
-            <p>Kamerada ko'rinmas bo'lish sehrini kashf eting!</p>
+            <p class="subtitle">Sehrli Qalpoqcha ishga tushirildi. Mo'jizalar brauzeringiz ichida sodir bo'ladi.</p>
         </header>
 
-        <main>
-            <div class="video-container">
-                <!-- Haqiqiy kamera oqimi (yashirin) -->
-                <video id="input_video" autoplay playsinline style="display: none;"></video>
-                <!-- Biz chizadigan va filtrlaydigan kanvas (ko'rinadigan) -->
-                <canvas id="output_canvas" width="640" height="480"></canvas>
-                
-                <div id="status_overlay" class="overlay">
-                    <h2 id="status_text">Dastur ishga tushishini kuting...</h2>
+        <main class="layout">
+            <!-- Chap panel: Video va Kamera -->
+            <div class="left-panel">
+                <div class="video-wrapper">
+                    <!-- Oltin burchaklar -->
+                    <div class="corner top-left"></div>
+                    <div class="corner top-right"></div>
+                    <div class="corner bottom-left"></div>
+                    <div class="corner bottom-right"></div>
+                    
+                    <video id="input_video" autoplay playsinline style="display: none;"></video>
+                    <!-- Pointer eventlarini boshqarish uchun maxsus sinf -->
+                    <canvas id="output_canvas" width="640" height="480"></canvas>
+                    
+                    <div id="color_picker_overlay" class="overlay" style="display: none;">
+                        <h2>Ekrandagi kepkangiz ustiga bosing!</h2>
+                        <div class="crosshair"></div>
+                    </div>
+                </div>
+                <div class="video-footer">
+                    <span class="status-indicator"><div id="status_dot" class="dot waiting"></div> <span id="status_text">Kamera kutilmoqda</span></span>
+                    <span class="resolution">640x480</span>
                 </div>
             </div>
 
-            <div class="controls glass-panel">
-                <div id="step_1" class="step-container active">
-                    <h3>1. Kepka rangini tanlang:</h3>
-                    <div class="color-buttons">
-                        <button class="color-btn blue" data-color="blue">Ko'k Kepka</button>
-                        <button class="color-btn black" data-color="black">Qora Kepka</button>
-                        <button class="color-btn white" data-color="white">Oq Kepka</button>
+            <!-- O'ng panel: Qadamlar -->
+            <div class="right-panel glass-panel">
+                
+                <!-- Qadam 1 -->
+                <div id="step_1" class="step active">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <h3>Kamerani yoqing</h3>
+                    </div>
+                    <div class="step-content">
+                        <p>Brauzer ruxsat so'raganda «Allow»ni bosing yoki quyidagi tugmani bosing.</p>
+                        <button id="btn_start_camera" class="action-btn">Kamerani yoqish</button>
                     </div>
                 </div>
 
-                <div id="step_2" class="step-container" style="display: none;">
-                    <h3>2. Orqa fon olinmoqda...</h3>
-                    <p class="warning-text">Kameradan chetga chiqing!</p>
-                    <div class="progress-bar-container">
-                        <div id="progress_bar" class="progress-bar"></div>
+                <!-- Qadam 2 -->
+                <div id="step_2" class="step disabled">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <h3>Bo'sh fonni saqlang</h3>
                     </div>
-                    <p id="countdown_text">3 soniya qoldi</p>
+                    <div class="step-content">
+                        <p>Kadrdan chetga chiqing, tugmani bosing — 3 soniya sanaladi va orqa fon xotiraga olinadi.</p>
+                        <button id="btn_save_bg" class="action-btn">Fonni saqlash</button>
+                        <div id="countdown_display" style="display: none; color: #f1c40f; margin-top: 10px; font-weight: bold;">Kutish: 3...</div>
+                    </div>
                 </div>
 
-                <div id="step_3" class="step-container" style="display: none;">
-                    <h3>✨ Sehr ishga tushdi!</h3>
-                    <p>Endi kepkangizni boshingizga kiying va qarab turing.</p>
-                    <button id="reset_btn" class="action-btn">Boshidan Boshlash</button>
+                <!-- Qadam 3 -->
+                <div id="step_3" class="step disabled">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <h3>Kepka rangini tanlang</h3>
+                    </div>
+                    <div class="step-content">
+                        <p>Videoning ichida, mato bo'lg'usi joyni (kepkangizni) sichqoncha bilan bosing.</p>
+                        
+                        <div class="picked-color-info">
+                            <div id="color_preview" class="color-preview"></div>
+                            <span id="color_hex">Rang hali tanlanmadi</span>
+                        </div>
+
+                        <div class="slider-container">
+                            <label for="sensitivity">Sezgirlik (rang chegarasi): <span id="sens_val">45</span></label>
+                            <input type="range" id="sensitivity" min="10" max="100" value="45">
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Qadam 4 -->
+                <div id="step_4" class="step disabled">
+                    <div class="step-header">
+                        <div class="step-number">4</div>
+                        <h3>Sehrni yoqing</h3>
+                    </div>
+                    <div class="step-content">
+                        <p>Endi shu rangdagi matoni tutgan joyingiz – g'oyib bo'ladi!</p>
+                        <button id="btn_start_magic" class="action-btn primary" disabled>Sehrni yoqish</button>
+                    </div>
+                </div>
+                
+                <div id="system_message" class="system-message">
+                    Dastur ishga tushishga tayyor.
+                </div>
+
             </div>
         </main>
-        
-        <footer>
-            <p>Sardor-Dev-2010 tomonidan yaratilgan</p>
-        </footer>
     </div>
 
     <script src="script.js"></script>
