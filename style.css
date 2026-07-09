@@ -71,9 +71,13 @@ body {
 
 .container {
     width: 100%;
-    max-width: 1300px; /* Ekranni to'ldirish uchun kengaytirildi */
-    padding: 20px;
+    max-width: 1600px; /* Yanada kattalashtirildi */
+    min-height: 90vh; /* Ekranni to'ldirishi uchun */
+    padding: 20px 40px;
     z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 header {
@@ -99,7 +103,8 @@ header {
 .layout {
     display: flex;
     gap: 40px;
-    align-items: flex-start;
+    align-items: stretch; /* Ikkala panel ham teng uzunlikda bo'ladi */
+    flex: 1;
 }
 
 @media (max-width: 950px) {
@@ -108,7 +113,7 @@ header {
 
 /* CHAP PANEL: Sehrli Ko'zgu */
 .left-panel {
-    flex: 2; /* Video kattaroq bo'lishi uchun */
+    flex: 2.5; /* Video qismi yanada kattaroq */
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -117,17 +122,22 @@ header {
 .video-wrapper {
     position: relative;
     width: 100%;
+    flex: 1; /* Qolgan barcha bo'sh joyni egallaydi */
     background-color: #000;
     /* Qadimiy ramka effekti */
     border: 8px ridge #5c4316;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 0 50px rgba(212, 175, 55, 0.2), inset 0 0 30px rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 canvas {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover; /* Qora joy qoldirmasdan fonni butkul qoplaydi */
     display: block;
     transform: scaleX(-1);
     cursor: crosshair;
