@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sehrli Qalpoqcha - Magical UI</title>
+    <title>Sehrli Qalpoqcha - Qadimiy Sehr</title>
+    <!-- Qadimiy shriftlar -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     
     <!-- MediaPipe Face Detection kutubxonalari -->
@@ -11,23 +13,23 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/face_detection.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div id="particles-js"></div>
+    <!-- Sehrli uchqunlar (Fireflies) -->
+    <div class="fireflies">
+        <div class="firefly"></div><div class="firefly"></div><div class="firefly"></div>
+        <div class="firefly"></div><div class="firefly"></div><div class="firefly"></div>
+        <div class="firefly"></div><div class="firefly"></div><div class="firefly"></div>
+    </div>
     
     <div class="container">
         <header>
-            <p class="subtitle">Sehrli Qalpoqcha ishga tushirildi. Mo'jizalar brauzeringiz ichida sodir bo'ladi.</p>
+            <h1 class="ancient-title">Sehrli Qalpoqcha</h1>
+            <p class="subtitle">Garri Potter olamiga xush kelibsiz. Qadimiy mo'jizalar brauzeringizda.</p>
         </header>
 
         <main class="layout">
-            <!-- Chap panel: Video va Kamera -->
+            <!-- Chap panel: Video va Kamera (Sehrli Ko'zgu) -->
             <div class="left-panel">
                 <div class="video-wrapper">
-                    <!-- Oltin burchaklar -->
-                    <div class="corner top-left"></div>
-                    <div class="corner top-right"></div>
-                    <div class="corner bottom-left"></div>
-                    <div class="corner bottom-right"></div>
-                    
                     <video id="input_video" autoplay playsinline style="display: none;"></video>
                     <!-- Pointer eventlarini boshqarish uchun maxsus sinf -->
                     <canvas id="output_canvas" width="640" height="480"></canvas>
@@ -38,35 +40,35 @@
                     </div>
                 </div>
                 <div class="video-footer">
-                    <span class="status-indicator"><div id="status_dot" class="dot waiting"></div> <span id="status_text">Kamera kutilmoqda</span></span>
-                    <span class="resolution">640x480</span>
+                    <span class="status-indicator"><div id="status_dot" class="dot waiting"></div> <span id="status_text">Sehrli ko'zgu kutilmoqda...</span></span>
+                    <span class="resolution">Kengaytirilgan Ko'rinish</span>
                 </div>
             </div>
 
-            <!-- O'ng panel: Qadamlar -->
-            <div class="right-panel glass-panel">
+            <!-- O'ng panel: Qadamlar (Qadimiy kitob) -->
+            <div class="right-panel">
                 
                 <!-- Qadam 1 -->
                 <div id="step_1" class="step active">
                     <div class="step-header">
-                        <div class="step-number">1</div>
-                        <h3>Kamerani yoqing</h3>
+                        <div class="step-number">I</div>
+                        <h3>Ko'zguni uyg'otish</h3>
                     </div>
                     <div class="step-content">
-                        <p>Brauzer ruxsat so'raganda «Allow»ni bosing yoki quyidagi tugmani bosing.</p>
-                        <button id="btn_start_camera" class="action-btn">Kamerani yoqish</button>
+                        <p>Kameraga ruxsat bering va mo'jizali ko'zguni yoqing.</p>
+                        <button id="btn_start_camera" class="action-btn">Ko'zguni yoqish</button>
                     </div>
                 </div>
 
                 <!-- Qadam 2 -->
                 <div id="step_2" class="step disabled">
                     <div class="step-header">
-                        <div class="step-number">2</div>
-                        <h3>Bo'sh fonni saqlang</h3>
+                        <div class="step-number">II</div>
+                        <h3>Xotirani muhrlash</h3>
                     </div>
                     <div class="step-content">
-                        <p>Kadrdan chetga chiqing, tugmani bosing — 3 soniya sanaladi va orqa fon xotiraga olinadi.</p>
-                        <button id="btn_save_bg" class="action-btn">Fonni saqlash</button>
+                        <p>Kadrdan chetga chiqing. Ko'zgu orqa fonni o'z xotirasiga muhrlaydi.</p>
+                        <button id="btn_save_bg" class="action-btn">Muhrlash</button>
                         <div id="countdown_display" style="display: none; color: #f1c40f; margin-top: 10px; font-weight: bold;">Kutish: 3...</div>
                     </div>
                 </div>
@@ -74,19 +76,19 @@
                 <!-- Qadam 3 -->
                 <div id="step_3" class="step disabled">
                     <div class="step-header">
-                        <div class="step-number">3</div>
-                        <h3>Kepka rangini tanlang</h3>
+                        <div class="step-number">III</div>
+                        <h3>Sehrli rangni tanlash</h3>
                     </div>
                     <div class="step-content">
-                        <p>Videoning ichida, mato bo'lg'usi joyni (kepkangizni) sichqoncha bilan bosing.</p>
+                        <p>Mo'jizali ko'zgu ichidagi matoni (kepkani) sichqoncha bilan bosing.</p>
                         
                         <div class="picked-color-info">
                             <div id="color_preview" class="color-preview"></div>
-                            <span id="color_hex">Rang hali tanlanmadi</span>
+                            <span id="color_hex">Hali tanlanmadi</span>
                         </div>
 
                         <div class="slider-container">
-                            <label for="sensitivity">Sezgirlik (rang chegarasi): <span id="sens_val">45</span></label>
+                            <label for="sensitivity">Sehr kuchi (sezgirlik): <span id="sens_val">45</span></label>
                             <input type="range" id="sensitivity" min="10" max="100" value="45">
                         </div>
                     </div>
@@ -95,17 +97,17 @@
                 <!-- Qadam 4 -->
                 <div id="step_4" class="step disabled">
                     <div class="step-header">
-                        <div class="step-number">4</div>
-                        <h3>Sehrni yoqing</h3>
+                        <div class="step-number">IV</div>
+                        <h3>Sehrni faollashtirish</h3>
                     </div>
                     <div class="step-content">
-                        <p>Endi shu rangdagi matoni tutgan joyingiz – g'oyib bo'ladi!</p>
+                        <p>Matoni kiyganingiz zahoti g'oyib bo'lasiz!</p>
                         <button id="btn_start_magic" class="action-btn primary" disabled>Sehrni yoqish</button>
                     </div>
                 </div>
                 
                 <div id="system_message" class="system-message">
-                    Dastur ishga tushishga tayyor.
+                    Hamma narsa tayyor. Boshlash mumkin.
                 </div>
 
             </div>

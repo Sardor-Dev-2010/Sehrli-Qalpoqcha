@@ -1,14 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
 
 :root {
-    --bg-color: #110f1c;
-    --panel-bg: rgba(30, 27, 75, 0.7);
-    --border-color: rgba(255, 255, 255, 0.05);
-    --text-main: #e2e8f0;
-    --text-muted: #94a3b8;
-    --accent-color: #f1c40f;
-    --primary-btn: #4f46e5;
-    --primary-btn-hover: #4338ca;
+    --bg-color: #0b0811; /* Qop-qora / To'q binafsha kosmos */
+    --panel-bg: rgba(22, 16, 36, 0.85); /* Qadimiy qorong'i pergament effekti */
+    --border-color: rgba(218, 165, 32, 0.3); /* Oltin rang */
+    --text-main: #f0e6d2; /* Qadimiy oq/sariq */
+    --text-muted: #b8a688; 
+    --accent-color: #d4af37; /* Qadimiy oltin (Antique Gold) */
+    --primary-btn: #4a2d1d; /* Qorong'i yog'och / charm */
+    --primary-btn-hover: #5c3a21;
     --success-color: #2ecc71;
 }
 
@@ -16,33 +16,62 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Inter', sans-serif;
 }
 
 body {
     background-color: var(--bg-color);
+    background-image: radial-gradient(circle at 50% 50%, rgba(56, 31, 100, 0.4) 0%, transparent 80%);
     color: var(--text-main);
+    font-family: 'Lora', serif;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
-/* Yulduzli sehrli fon (Oddiy CSS versiyasi) */
-#particles-js {
+/* Sehrli yulduzlar va uchqunlar (Fireflies) animatsiyasi */
+.fireflies {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background-image: 
-        radial-gradient(circle at 15% 50%, rgba(79, 70, 229, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 85% 30%, rgba(241, 196, 15, 0.08) 0%, transparent 50%);
-    z-index: -1;
+    z-index: 0;
+    pointer-events: none;
+}
+.firefly {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background-color: var(--accent-color);
+    border-radius: 50%;
+    box-shadow: 0 0 15px 3px var(--accent-color);
+    opacity: 0;
+    animation: float 8s infinite ease-in-out, flash 4s infinite alternate;
+}
+.firefly:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s, 0s; }
+.firefly:nth-child(2) { top: 70%; left: 20%; animation-delay: 2s, 1s; }
+.firefly:nth-child(3) { top: 40%; left: 80%; animation-delay: 4s, 2s; }
+.firefly:nth-child(4) { top: 80%; left: 70%; animation-delay: 1s, 0.5s; }
+.firefly:nth-child(5) { top: 30%; left: 40%; animation-delay: 5s, 3s; }
+.firefly:nth-child(6) { top: 10%; left: 60%; animation-delay: 3s, 1.5s; }
+.firefly:nth-child(7) { top: 85%; left: 90%; animation-delay: 6s, 4s; }
+.firefly:nth-child(8) { top: 50%; left: 50%; animation-delay: 1.5s, 2.5s; }
+.firefly:nth-child(9) { top: 15%; left: 85%; animation-delay: 7s, 0s; }
+
+@keyframes float {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(30px, -40px); }
+    100% { transform: translate(0, 0); }
+}
+@keyframes flash {
+    0% { opacity: 0; }
+    50% { opacity: 0.8; }
+    100% { opacity: 0; }
 }
 
 .container {
     width: 100%;
-    max-width: 1100px;
+    max-width: 1300px; /* Ekranni to'ldirish uchun kengaytirildi */
     padding: 20px;
     z-index: 1;
 }
@@ -52,63 +81,56 @@ header {
     margin-bottom: 30px;
 }
 
+.ancient-title {
+    font-family: 'Cinzel', serif;
+    font-size: 3.5rem;
+    color: var(--accent-color);
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+    margin-bottom: 10px;
+}
+
 .subtitle {
     color: var(--text-muted);
-    font-size: 0.95rem;
-    letter-spacing: 0.5px;
+    font-size: 1.1rem;
+    font-style: italic;
+    letter-spacing: 1px;
 }
 
 .layout {
     display: flex;
-    gap: 30px;
+    gap: 40px;
     align-items: flex-start;
 }
 
-@media (max-width: 850px) {
+@media (max-width: 950px) {
     .layout { flex-direction: column; }
 }
 
-/* CHAP PANEL */
+/* CHAP PANEL: Sehrli Ko'zgu */
 .left-panel {
-    flex: 1.5;
+    flex: 2; /* Video kattaroq bo'lishi uchun */
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
 }
 
 .video-wrapper {
     position: relative;
     width: 100%;
     background-color: #000;
+    /* Qadimiy ramka effekti */
+    border: 8px ridge #5c4316;
     border-radius: 12px;
     overflow: hidden;
-    padding: 15px; /* Burchaklar uchun joy */
-    background: var(--panel-bg);
-    border: 1px solid var(--border-color);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 50px rgba(212, 175, 55, 0.2), inset 0 0 30px rgba(0,0,0,0.8);
 }
-
-.corner {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border-color: var(--accent-color);
-    border-style: solid;
-    z-index: 10;
-}
-
-.top-left { top: 15px; left: 15px; border-width: 2px 0 0 2px; border-top-left-radius: 4px; }
-.top-right { top: 15px; right: 15px; border-width: 2px 2px 0 0; border-top-right-radius: 4px; }
-.bottom-left { bottom: 15px; left: 15px; border-width: 0 0 2px 2px; border-bottom-left-radius: 4px; }
-.bottom-right { bottom: 15px; right: 15px; border-width: 0 2px 2px 0; border-bottom-right-radius: 4px; }
 
 canvas {
     width: 100%;
     height: auto;
     display: block;
-    border-radius: 8px;
     transform: scaleX(-1);
-    cursor: crosshair; /* Rang tanlash uchun */
+    cursor: crosshair;
 }
 
 .video-footer {
@@ -116,195 +138,215 @@ canvas {
     justify-content: space-between;
     align-items: center;
     padding: 0 10px;
-    font-size: 0.85rem;
-    color: var(--text-muted);
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    color: var(--accent-color);
 }
 
 .status-indicator {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
 .dot {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
 }
-.dot.waiting { background-color: #f39c12; box-shadow: 0 0 8px #f39c12; }
-.dot.active { background-color: var(--success-color); box-shadow: 0 0 8px var(--success-color); }
+.dot.waiting { background-color: #f39c12; box-shadow: 0 0 10px #f39c12; }
+.dot.active { background-color: var(--success-color); box-shadow: 0 0 10px var(--success-color); }
 
-/* O'NG PANEL (QADAMLAR) */
+/* O'NG PANEL (QADAMLAR KITOBLARI) */
 .right-panel {
-    flex: 1;
+    flex: 1.2;
     background: var(--panel-bg);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    padding: 25px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 30px;
     display: flex;
     flex-direction: column;
     gap: 25px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+    /* Kitob varag'i teksturasi effekti uchun radial gradient */
+    background-image: radial-gradient(circle at center, rgba(40,30,50,0.6) 0%, rgba(20,15,30,0.9) 100%);
 }
 
 .step {
-    transition: opacity 0.3s ease;
+    transition: opacity 0.4s ease, transform 0.3s ease;
 }
 
 .step.disabled {
-    opacity: 0.4;
+    opacity: 0.3;
     pointer-events: none;
+    transform: scale(0.98);
 }
 
 .step-header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 8px;
+    gap: 15px;
+    margin-bottom: 10px;
 }
 
 .step-number {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background-color: var(--accent-color);
-    color: #000;
+    width: 35px;
+    height: 35px;
+    border-radius: 4px;
+    background: linear-gradient(135deg, #d4af37, #8b6508);
+    color: #111;
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: 'Cinzel', serif;
     font-weight: 700;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
 }
 
 .step.disabled .step-number {
-    background-color: #334155;
-    color: var(--text-muted);
+    background: #3a2e1d;
+    color: #7a6e5d;
+    box-shadow: none;
 }
 
 .step h3 {
-    font-size: 1.1rem;
-    font-weight: 500;
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    color: var(--accent-color);
 }
 
 .step-content {
-    padding-left: 40px;
+    padding-left: 50px;
 }
 
 .step-content p {
-    font-size: 0.85rem;
+    font-size: 1rem;
     color: var(--text-muted);
-    margin-bottom: 12px;
-    line-height: 1.5;
+    margin-bottom: 15px;
+    line-height: 1.6;
 }
 
 .action-btn {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--text-main);
-    padding: 8px 16px;
-    border-radius: 6px;
+    background: linear-gradient(to bottom, #4a2d1d, #2d180f);
+    border: 1px solid #734f31;
+    color: var(--accent-color);
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
 }
 
 .action-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(to bottom, #5c3a21, #3f2215);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(212, 175, 55, 0.2);
 }
 
 .action-btn.primary {
-    background: var(--primary-btn);
-    border-color: var(--primary-btn);
+    background: linear-gradient(to bottom, #8b6508, #5c4316);
+    color: #fff;
+    border-color: #d4af37;
 }
 
 .action-btn.primary:hover {
-    background: var(--primary-btn-hover);
+    background: linear-gradient(to bottom, #a37c15, #73541c);
 }
 
 .action-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    transform: none;
 }
 
 /* Rang tanlash UI */
 .picked-color-info {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-    font-size: 0.9rem;
+    gap: 15px;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    color: var(--text-main);
 }
 
 .color-preview {
-    width: 24px;
-    height: 24px;
-    border-radius: 4px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
     background-color: transparent;
-    border: 1px solid var(--border-color);
+    border: 2px solid var(--accent-color);
+    box-shadow: 0 0 10px var(--accent-color);
 }
 
 .slider-container {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 8px;
 }
 
 .slider-container label {
-    font-size: 0.85rem;
-    color: var(--text-muted);
+    font-size: 0.95rem;
+    color: var(--accent-color);
 }
 
 input[type=range] {
     -webkit-appearance: none;
     width: 100%;
-    background: rgba(255, 255, 255, 0.1);
-    height: 4px;
-    border-radius: 2px;
+    background: #3a2e1d;
+    height: 6px;
+    border-radius: 3px;
     outline: none;
+    border: 1px solid #5c4316;
 }
 
 input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 14px;
-    height: 14px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     background: var(--accent-color);
     cursor: pointer;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
 }
 
 .system-message {
-    margin-top: 10px;
-    padding: 12px;
-    background: rgba(241, 196, 15, 0.1);
-    border-left: 3px solid var(--accent-color);
-    border-radius: 4px;
-    font-size: 0.85rem;
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(45, 24, 15, 0.6);
+    border-left: 4px solid var(--accent-color);
+    font-style: italic;
+    font-size: 0.95rem;
     color: var(--text-main);
 }
 
 .overlay {
     position: absolute;
-    top: 15px; left: 15px; right: 15px; bottom: 15px;
-    background: rgba(0,0,0,0.5);
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     z-index: 20;
-    pointer-events: none; /* Kanvasga bosish uchun o'tkazib yuboradi */
+    pointer-events: none;
 }
 
 .overlay h2 {
-    font-size: 1.2rem;
-    color: #fff;
-    margin-bottom: 10px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    color: var(--accent-color);
+    margin-bottom: 15px;
+    text-shadow: 0 2px 10px #000;
 }
 
 .crosshair {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     border: 2px solid var(--accent-color);
     border-radius: 50%;
     position: relative;
@@ -313,11 +355,11 @@ input[type=range]::-webkit-slider-thumb {
 .crosshair::before, .crosshair::after {
     content: ''; position: absolute; background: var(--accent-color);
 }
-.crosshair::before { top: 50%; left: -10px; right: -10px; height: 2px; margin-top: -1px; }
-.crosshair::after { left: 50%; top: -10px; bottom: -10px; width: 2px; margin-left: -1px; }
+.crosshair::before { top: 50%; left: -15px; right: -15px; height: 2px; margin-top: -1px; }
+.crosshair::after { left: 50%; top: -15px; bottom: -15px; width: 2px; margin-left: -1px; }
 
 @keyframes pulse {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.2); opacity: 0.7; }
-    100% { transform: scale(1); opacity: 1; }
+    0% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+    70% { transform: scale(1.1); opacity: 0.8; box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+    100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
 }
