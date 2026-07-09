@@ -235,8 +235,8 @@ function updateColorBounds() {
     
     lowerBound = [
         Math.max(0, h - hue_tol),
-        Math.max(10, s - sv_tol), // S juda pasayib qora/oq bo'lib ketmasin
-        Math.max(10, v - sv_tol)
+        Math.max(40, s - sv_tol), // S juda pasayib ketmasligi uchun (kulrang/qorani olmasin)
+        Math.max(40, v - sv_tol)  // V juda pasayib qora soyalarni olmasligi uchun
     ];
     upperBound = [
         Math.min(180, h + hue_tol),
