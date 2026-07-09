@@ -305,6 +305,7 @@ canvas {
 
 input[type=range] {
     -webkit-appearance: none;
+    appearance: none;
     width: 100%;
     background: #3a2e1d;
     height: 6px;
