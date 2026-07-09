@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sehrli Qalpoqcha</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- MediaPipe Face Detection kutubxonalari -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection/face_detection.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="background-animation"></div>
+    
+    <div class="container">
+        <header>
+            <h1>🎩 Sehrli Qalpoqcha</h1>
+            <p>Kamerada ko'rinmas bo'lish sehrini kashf eting!</p>
+        </header>
+
+        <main>
+            <div class="video-container">
+                <!-- Haqiqiy kamera oqimi (yashirin) -->
+                <video id="input_video" autoplay playsinline style="display: none;"></video>
+                <!-- Biz chizadigan va filtrlaydigan kanvas (ko'rinadigan) -->
+                <canvas id="output_canvas" width="640" height="480"></canvas>
+                
+                <div id="status_overlay" class="overlay">
+                    <h2 id="status_text">Dastur ishga tushishini kuting...</h2>
+                </div>
+            </div>
+
+            <div class="controls glass-panel">
+                <div id="step_1" class="step-container active">
+                    <h3>1. Kepka rangini tanlang:</h3>
+                    <div class="color-buttons">
+                        <button class="color-btn blue" data-color="blue">Ko'k Kepka</button>
+                        <button class="color-btn black" data-color="black">Qora Kepka</button>
+                        <button class="color-btn white" data-color="white">Oq Kepka</button>
+                    </div>
+                </div>
+
+                <div id="step_2" class="step-container" style="display: none;">
+                    <h3>2. Orqa fon olinmoqda...</h3>
+                    <p class="warning-text">Kameradan chetga chiqing!</p>
+                    <div class="progress-bar-container">
+                        <div id="progress_bar" class="progress-bar"></div>
+                    </div>
+                    <p id="countdown_text">3 soniya qoldi</p>
+                </div>
+
+                <div id="step_3" class="step-container" style="display: none;">
+                    <h3>✨ Sehr ishga tushdi!</h3>
+                    <p>Endi kepkangizni boshingizga kiying va qarab turing.</p>
+                    <button id="reset_btn" class="action-btn">Boshidan Boshlash</button>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Sardor-Dev-2010 tomonidan yaratilgan</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
